@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://cdn.discordapp.com/icons/1173245026172682330/eef594ce93174ca48d743394381310d9.png?size=512" type="">
+    <title> Siber Korsan</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+        }
+        #logo-container {
+            text-align: center;
+            color: white;
+        }
+        #logo-container img {
+            max-width: 50%;
+            height: auto;
+            border-radius: 50%;
+        }
+        p {
+            font-size: 24px;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+        .binary-raindrop {
+            position: absolute;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            opacity: 0;
+        }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 999;
+        }
+        #overlay p {
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            margin-top: 30%;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("mousemove", handleMouseMove);
+            document.addEventListener("contextmenu", handleRightClick);
+            createBinaryRain();
+        });
+
+        let musicPlayed = false;
+
+        function handleMouseMove() {
+            if (!musicPlayed) {
+                playMusic();
+                musicPlayed = true; // Müzik bir kez çalındı
+            }
+        }
+
+        function playMusic() {
+            const music = document.getElementById("background-music");
+            music.play().catch((error) => {
+                console.log("Müzik çalma hatası:", error);
+            });
+        }
+
+        function createBinaryRaindrop() {
+            const binaryDigit = Math.round(Math.random());
+            const raindrop = document.createElement("div");
+            raindrop.classList.add("binary-raindrop");
+            raindrop.innerText = binaryDigit;
+            raindrop.style.left = Math.random() * window.innerWidth + "px";
+            raindrop.style.top = 0;
+            raindrop.style.opacity = 1;
+            document.body.appendChild(raindrop);
+            animateRaindrop(raindrop, binaryDigit);
+        }
+
+        function animateRaindrop(raindrop, binaryDigit) {
+            const animationDuration = Math.random() * 5000 + 2000;
+            let startTime;
+            function animate(now) {
+                if (!startTime) startTime = now;
+                const elapsedTime = now - startTime;
+                const progress = elapsedTime / animationDuration;
+                raindrop.style.top = progress * window.innerHeight + "px";
+                raindrop.style.opacity = 1 - progress;
+                if (progress > 0.5) {
+                    raindrop.innerText = binaryDigit;
+                }
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    raindrop.remove();
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function createBinaryRain() {
+            createBinaryRaindrop();
+            setInterval(createBinaryRaindrop, 100);
+        }
+
+        function handleRightClick(event) {
+            event.preventDefault();
+            playMusic();
+        }
+    </script>
+</head>
+<body>
+    <div id="overlay">
+        <p>Loading...</p>
+    </div>
+    <div id="logo-container">
+        <img src="https://cdn.discordapp.com/avatars/210813140265467905/087180c5099dd767466ac0bb7a1a853f.png?size=512" alt="Siber Korsan">
+    </div>
+    <audio id="background-music" loop>
+        <source src="https://ia800404.us.archive.org/7/items/Mozart_20160424_2121/Mozart-Turkish_March.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</body>
+</html>
